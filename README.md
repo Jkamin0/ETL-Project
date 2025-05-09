@@ -1,10 +1,8 @@
-# Independent Study Project Ideas
-
-My project proposal is to construct a ETL pipeline that pulls from an API data source. Below I have two sources as potential data candidates but both would use the proposed ETL pipeline.
+# Game Popularity Trend Pipeline
 
 ![PipelineImage](/Design/pipeline.png)
 
-## Game Popularity Trend Pipeline
+## Project Overview
 
 This ETL pipeline collects and processes data related to video game popularity on Steam. The primary data sources are:
 
@@ -26,16 +24,49 @@ This ETL pipeline collects and processes data related to video game popularity o
   - Regional popularity
   - Additional metadata
 
-## Satellite Trajectories Pipeline
+## Goals
 
-This ETL pipeline collects, processes, and stores satellite tracking data from **CelesTrak**. The primary data sources are:
+1. Data Integration and Analysis
 
-### CelesTrak Satellite Data
+- Consolidate game popularity data from Steam Web API and SteamSpy into a centralized PostgreSQL database
+- Comprehensive analysis of player count trends across different time periods and game categories
 
-- **URL:** [https://www.celestrak.com/](https://www.celestrak.com/)
-- **Purpose:** Provides satellite tracking data, including real-time and historical information about satellites in orbit, TLE (two-line element) data, and orbital parameters.
-- **Used for:**
-  - Satellite location and trajectories
-  - Tracking active satellites and space debris
-  - TLE data for satellite predictions
-  - Space station data (e.g., ISS position)
+2. Pipeline Reliability
+
+- Robust data collection with error handling for API limitations and outages
+- A modular architecture that can easily incorporate additional data sources or metrics in the future
+
+3. Accessible Visualization
+
+- Intuitive Grafana dashboards that present key metrics and trends
+- Support data-driven decision making with customizable reports
+
+## Milestones:
+
+I plan to use the default milestone dates provided in canvas. As the project progresses and matures, I may make slight changes along the way. I hope to have the following done for each milestone:
+
+### Milestone 1: Data Collection & Storage Foundation
+
+- Implement API connectors for Steam Web API and SteamSpy
+- Create raw data storage layer with proper schema design
+- Build initial ETL pipeline with scheduled Airflow DAGs for daily data collection
+
+Deliverable: Functional pipeline consistently collecting and storing raw game data
+
+### Milestone 2: Data Transformation & Analysis
+
+- Develop transformation scripts using pandas to clean and structure the data
+- Create dimension and fact tables in PostgreSQL for analytical queries
+- Implement historical trend calculations and popularity metrics
+- Build aggregation logic for different time periods (daily, weekly, monthly)
+
+Deliverable: Complete transformation layer with cleaned, structured data ready for analysis
+
+### Milestone 3: Visualization & Insights Platform
+
+- Set up Grafana dashboard with real-time game popularity metrics
+- Create custom visualizations for trend analysis and comparisons
+- Implement automated reports for rising/declining games
+- Build genre, category, and regional analysis features
+
+Deliverable: Fully functional end-to-end system with interactive dashboards for game popularity insights

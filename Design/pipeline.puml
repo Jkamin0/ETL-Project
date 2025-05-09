@@ -14,7 +14,7 @@ component "APIs \n(Data Source)" as Source
 database "Raw Data Store\n(Local CSV)" as RawStore
 component "Transform Script\n(pandas)" as Transform
 component "Load Script\n(SQL / ORM)" as Loader
-database "Clean Data Store\n(PostgreSQL)" as CleanStore
+database "Clean Data Warehouse\n(PostgreSQL)" as DataWarehouse
 component "Dashboard\n(Grafana)" as Dashboard
 component "DAG Schedule\n(e.g., daily 1 AM)" as Schedule
 
@@ -27,9 +27,9 @@ Transform --> RawStore : Read raw data
 Transform --> Loader : Pass cleaned data
 
 Airflow --> Loader : Execute load step
-Loader --> CleanStore : Store in PostgreSQL
+Loader --> DataWarehouse : Store in PostgreSQL
 
-Dashboard --> CleanStore : Query cleaned data
+Dashboard --> DataWarehouse : Query cleaned data
 User --> Dashboard : View insights
 
 @enduml
