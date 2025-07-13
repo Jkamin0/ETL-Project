@@ -76,14 +76,14 @@ def fetch_top_games(**context):
         raise
 
 def enrich_with_steam_data(**context):
-    """Enrich games data with Steam Store API data"""
+    """Enrich games data with Steam Store API data and get CCU from Valve API"""
     steamspy_games = context['task_instance'].xcom_pull(key='steamspy_games')
     
     if not steamspy_games:
         logging.error("No SteamSpy games data found")
         raise ValueError("No SteamSpy games data found")
     
-    logging.info(f"Enriching {len(steamspy_games)} games with Steam Store data...")
+    logging.info(f"Enriching {len(steamspy_games)} games with Steam Store data and official CCU...")
     
     enriched_games = []
     
@@ -103,6 +103,22 @@ def enrich_with_steam_data(**context):
             steam_response.raise_for_status()
             steam_data = steam_response.json()
             
+            # Fetch current player count (CCU) from Valve API
+            ccu = 0
+            try:
+                ccu_url = "https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/"
+                ccu_params = {'appid': appid}
+                ccu_response = requests.get(ccu_url, params=ccu_params, timeout=10)
+                ccu_response.raise_for_status()
+                ccu_data = ccu_response.json()
+                if 'response' in ccu_data and ccu_data['response'].get('result') == 1:
+                    ccu = ccu_data['response'].get('player_count', 0)
+                else:
+                    logging.warning(f"Valve CCU API returned no data or error for appid {appid}")
+            except Exception as e:
+                logging.warning(f"Error fetching CCU for appid {appid}: {str(e)}")
+                ccu = 0
+            
             # Extract Steam data
             app_data = steam_data.get(str(appid), {})
             if app_data.get('success') and 'data' in app_data:
@@ -117,8 +133,7 @@ def enrich_with_steam_data(**context):
                     'steamspy_owners': game['owners'],
                     'steamspy_average_playtime': game['average_playtime'],
                     'steamspy_median_playtime': game['median_playtime'],
-                    'steamspy_ccu': game['ccu'],
-                    'steamspy_ccu': game['ccu'],
+                    'steamspy_ccu': ccu,
                     'steam_price_initial': steam_info.get('price_overview', {}).get('initial', None),
                     'steam_price_final': steam_info.get('price_overview', {}).get('final', None),
                     'steam_price_discount_percent': steam_info.get('price_overview', {}).get('discount_percent', None),
@@ -134,7 +149,6 @@ def enrich_with_steam_data(**context):
                 enriched_games.append(enriched_game)
             else:
                 logging.warning(f"No Steam data found for app {appid}")
-                # Still add the SteamSpy data
                 enriched_games.append({
                     'appid': appid,
                     'name': game['name'],
@@ -143,6 +157,7 @@ def enrich_with_steam_data(**context):
                     'steamspy_owners': game['owners'],
                     'steamspy_average_playtime': game['average_playtime'],
                     'steamspy_median_playtime': game['median_playtime'],
+                    'steamspy_ccu': ccu,  # <-- replaced here
                     'steam_price_initial': None,
                     'steam_price_final': None,
                     'steam_price_discount_percent': None,
@@ -168,6 +183,7 @@ def enrich_with_steam_data(**context):
     context['task_instance'].xcom_push(key='enriched_games', value=enriched_games)
     
     return len(enriched_games)
+
 
 def store_in_database(**context):
     """Store enriched games data in PostgreSQL (games updated, steamspy daily snapshots)"""
