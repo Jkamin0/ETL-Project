@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from airflow.utils.dates import days_ago
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 import requests
@@ -10,7 +11,7 @@ import logging
 default_args = {
     'owner': 'steam-data-team',
     'depends_on_past': False,
-    'start_date': datetime.now() - timedelta(days=1),
+    'start_date': days_ago(1),
     'email_on_failure': False,
     'email_on_retry': False,
     'retries': 1,

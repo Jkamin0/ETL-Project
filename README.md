@@ -39,6 +39,22 @@ Connect to PostgreSQL:
 - **Username**: airflow
 - **Password**: airflow
 
+## Data Visualization with Metabase
+
+The pipeline includes Metabase for creating dashboards and visualizing your Steam game data:
+
+- **Access Metabase**: [http://localhost:3000](http://localhost:3000)
+- **First-time setup**: Create an admin account when prompted
+- **Database connection**: Already configured to connect to the PostgreSQL warehouse
+- **Data exploration**: Browse the star schema tables (dim_games, dim_publishers, fact_game_metrics, etc.)
+- **Dashboard creation**: Build interactive charts and dashboards to analyze game trends, CCU patterns, and genre performance
+
+**Useful Metabase features for this data:**
+- Time series charts for tracking CCU over time
+- Bar charts for comparing games by metrics
+- Filters for drilling down by genre, publisher, or date range
+- Automated dashboard refreshes to show latest data
+
 ## Trending Analysis Examples
 
 ```sql

@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from airflow.utils.dates import days_ago
 from airflow import DAG
 from airflow.operators.python import PythonOperator, BranchPythonOperator
 from airflow.operators.bash import BashOperator
@@ -11,7 +12,7 @@ from typing import List, Dict, Any
 default_args = {
     'owner': 'steam-data-team',
     'depends_on_past': False,
-    'start_date': datetime.now() - timedelta(days=1) + timedelta(minutes=5),  # Run 5 minutes after main ETL
+    'start_date': days_ago(1),  # Run after main ETL
     'email_on_failure': False,
     'email_on_retry': False,
     'retries': 2,
