@@ -14,11 +14,12 @@ I built a complete ETL pipeline for Steam game data that extracts gaming data fr
 The system includes two Apache Airflow DAGs running in Docker containers, a PostgreSQL database with raw and warehouse schemas, and Metabase visualization tools. The pipeline collects daily data on the top 100 most-played Steam games, enriches data with metadata, and stores data in a star schema for analysis.
 
 Key accomplishments:
-• API integration with rate limiting and error handling
-• Dimensional data model with fact and dimension tables
-• Automated incremental loading with change detection
-• Containerized deployment using Docker Compose
-• Business intelligence through Metabase
+
+- API integration with rate limiting and error handling
+- Dimensional data model with fact and dimension tables
+- Automated incremental loading with change detection
+- Containerized deployment using Docker Compose
+- Business intelligence through Metabase
 
 The system proved its reliability by completing over 30 scheduled executions.
 
@@ -50,11 +51,11 @@ The pipeline follows modern data engineering practices, and the implementation i
 
 **Core Components:**
 
-• **Orchestration Layer:** Apache Airflow with two coordinated DAGs
-• **Data Sources:** SteamSpy API and Steam Web API
-• **Storage Layer:** PostgreSQL with separate schemas for raw and warehouse data
-• **Containerization:** Docker Compose for reproducible deployments
-• **Visualization:** Metabase for business intelligence and dashboards
+- **Orchestration Layer:** Apache Airflow with two coordinated DAGs
+- **Data Sources:** SteamSpy API and Steam Web API
+- **Storage Layer:** PostgreSQL with separate schemas for raw and warehouse data
+- **Containerization:** Docker Compose for reproducible deployments
+- **Visualization:** Metabase for business intelligence and dashboards
 
 ### Data Ingestion Pipeline (steam_games_dag.py)
 
@@ -74,11 +75,11 @@ I query the SteamSpy API to retrieve the top 100 most-played games in the last t
 **Stage 2: Data Enrichment**
 For each game from Stage 1, I query the official Steam Web API to gather metadata:
 
-• Game descriptions and metadata
-• Pricing information and discounts
-• Developer and publisher information
-• Genre and category classifications
-• Release dates and other temporal data
+- Game descriptions and metadata
+- Pricing information and discounts
+- Developer and publisher information
+- Genre and category classifications
+- Release dates and other temporal data
 
 **Stage 3: Data Persistence**
 I store the enriched data in PostgreSQL tables optimized for raw data preservation and analytical queries. The system implements upsert logic to handle duplicate records and maintain data integrity.
@@ -89,11 +90,11 @@ The warehouse ETL DAG transforms raw ingestion data into a dimensional model for
 
 **Dimensional Model Design:**
 
-• **dim_games:** Game master data with overwriting updates
-• **dim_publishers:** Publisher dimension with bridge table for many-to-many relationships
-• **dim_genres:** Genre classifications with bridge table support
-• **dim_date:** Standard date dimension for temporal analysis
-• **fact_game_metrics:** Daily game performance metrics
+- **dim_games:** Game master data with overwriting updates
+- **dim_publishers:** Publisher dimension with bridge table for many-to-many relationships
+- **dim_genres:** Genre classifications with bridge table support
+- **dim_date:** Standard date dimension for temporal analysis
+- **fact_game_metrics:** Daily game performance metrics
 
 **Incremental Loading Strategy:**
 I implemented incremental loading using bookmarking:
@@ -156,41 +157,41 @@ I evolved the project through six major commits:
 
 **Phase 1: Foundation (Initial Commit - June 2025)**
 
-• Repository initialization with .gitignore
-• Basic project structure establishment
+- Repository initialization with .gitignore
+- Basic project structure establishment
 
 **Phase 2: Design and Planning (README and PlantUML - March 2025)**
 
-• Architectural design documentation
-• PlantUML pipeline diagrams
-• Initial project documentation
+- Architectural design documentation
+- PlantUML pipeline diagrams
+- Initial project documentation
 
 **Phase 3: Core ETL Implementation (API Integration - June 2025)**
 
-• Steam API integration with rate limiting
-• PostgreSQL database schema design
-• Docker containerization setup
-• Airflow DAG implementation (314 lines of core ETL logic)
-• Basic raw data storage functionality
+- Steam API integration with rate limiting
+- PostgreSQL database schema design
+- Docker containerization setup
+- Airflow DAG implementation (314 lines of core ETL logic)
+- Basic raw data storage functionality
 
 **Phase 4: Data Warehouse Development (July 2025)**
 
-• Dimensional model design and implementation
-• Warehouse ETL DAG creation (367 lines of transformation logic)
-• Incremental loading strategy implementation
-• Advanced SQL schema with 128 additional lines
+- Dimensional model design and implementation
+- Warehouse ETL DAG creation (367 lines of transformation logic)
+- Incremental loading strategy implementation
+- Advanced SQL schema with 128 additional lines
 
 **Phase 5: API Optimization (July 2025)**
 
-• Migration from third-party to official Valve API endpoints
-• Improved data accuracy and reliability
-• Enhanced error handling and retry logic
+- Migration from third-party to official Valve API endpoints
+- Improved data accuracy and reliability
+- Enhanced error handling and retry logic
 
 **Phase 6: Business Intelligence Integration (August 2025)**
 
-• Metabase integration for visualization
-• Docker Compose enhancements for BI stack
-• Dashboard and reporting tools
+- Metabase integration for visualization
+- Docker Compose enhancements for BI stack
+- Dashboard and reporting tools
 
 ### Key Technical Decisions
 
@@ -200,10 +201,10 @@ I initially used third-party APIs but evolved to use official Valve endpoints fo
 **Containerization Approach:**
 I chose Docker Compose for orchestration to ensure environment consistency and simplified deployment. The final configuration includes:
 
-• PostgreSQL database service
-• Airflow web server and scheduler
-• Metabase business intelligence platform
-• Shared network configuration for inter-service communication
+- PostgreSQL database service
+- Airflow web server and scheduler
+- Metabase business intelligence platform
+- Shared network configuration for inter-service communication
 
 **Data Modeling Philosophy:**
 The dimensional model follows Kimball methodology with proper fact and dimension table design. Bridge tables handle many-to-many relationships (games-to-genres, games-to-publishers), enabling flexible analytical queries without data duplication.
@@ -381,17 +382,17 @@ The decision to switch from third-party APIs to official Valve endpoints mid-pro
 The initial single-table approach evolved into a sophisticated dimensional model as the project progressed. This evolution demonstrated the value of flexible design patterns to accommodate changing requirements in a real work environment.
 
 **Visualization Integration:**
-The late addition of Metabase wasn't part of the original design (planed to use Grafana) but became essential for demonstrating the pipeline's value. This taught the importance of considering end-user needs throughout the development process.
+The late addition of Metabase wasn't part of the original design (planed to use Grafana) but is essential for demonstrating the pipeline's value. This taught the importance of considering end-user needs throughout the development process.
 
 ---
 
 ## Conclusion
 
-I successfully delivered a production-ready ETL pipeline demonstrating mastery of modern data engineering principles and practices. The system extracts, transforms, and loads Steam gaming data while maintaining high standards for reliability and maintainability.
+I successfully delivered a production-ready ETL pipeline demonstrating the usage of modern data engineering principles and practices. The system extracts, transforms, and loads Steam gaming data while maintaining high standards for reliability and maintainability.
 
 The project's evolution from a simple API integration to a full data warehouse with business intelligence capabilities reflects a full implementation of the data engineering lifecycle. Key achievements include implementing robust API integration with error handling, designing and implementing a dimensional data model following industry best practices, building automated incremental loading with change detection, containerizing the entire solution for reproducible deployments, and integrating business intelligence capabilities for end-user value.
 
-Beyond technical accomplishments, this project provided valuable learning experiences in architectural planning and iterative development The challenges encountered provided opportunities to develop critical problem-solving skills essential for professional data engineering work.
+Beyond technical accomplishments, this project provided valuable learning experiences in architectural planning and iterative development The challenges encountered provided opportunities to develop problem-solving skills essential for professional data engineering work.
 
 The final system represents a solid foundation for gaming industry analytics, supporting various analytical use cases from trend analysis to market research. The modular architecture and comprehensive documentation ensure the system allows future extensions and maintenance.
 
